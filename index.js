@@ -25,16 +25,19 @@ async function gotoTabCritiques(page, url) {
     await page.waitForSelector(SELECTORS.filmReviewBlock, { timeout: 8000 });
 }
 
-async function scrapeAllFilms(page, profileUrl) {
+async function scrapeAllFilms(page, profileUrl, maxPages = 17) {
     let films = [];
-    let url = profileUrl;
-    const visitedUrls = new Set();
-    
-    while (true) {
-        if (visitedUrls.has(url)) break;
-        visitedUrls.add(url);
 
+    // Générer toutes les URLs jusqu'à maxPages
+    const pageUrls = [];
+    for (let i = 1; i <= maxPages; i++) {
+        pageUrls.push(`${profileUrl}?page=${i}`);
+    }
+
+    for (const url of pageUrls) {
+        console.log(`Scraping page: ${url}`);
         await page.goto(url, { waitUntil: 'domcontentloaded' });
+
         if (await page.$(SELECTORS.popupAcceptCookies)) {
             await page.click(SELECTORS.popupAcceptCookies);
             await page.waitForTimeout(600);
@@ -52,13 +55,13 @@ async function scrapeAllFilms(page, profileUrl) {
                 return { title, rating };
             })
         );
-        films = films.concat(pageFilms);
 
-        const nextPage = await page.$(SELECTORS.nextPage);
-        if (!nextPage) break;
-        const nextHref = await page.evaluate(el => el.getAttribute('href'), nextPage);
-        if (!nextHref || !nextHref.startsWith('http') || visitedUrls.has(nextHref)) break;
-        url = nextHref;
+        if (pageFilms.length === 0) {
+            console.log(`Page ${url} vide, arrêt du scraping des pages.`);
+            break; // Si aucune donnée sur une page → fin anticipée
+        }
+
+        films = films.concat(pageFilms);
     }
     return films;
 }
