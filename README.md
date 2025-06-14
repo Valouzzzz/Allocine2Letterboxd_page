@@ -34,7 +34,7 @@ async function scrapeAllFilms(page, profileUrl, maxPages = 17)
 
 ### Bonus 
 
-Pour recuperer les urls, acteurs, realisateur et durée de chaque film noté :
+Pour recuperer les url, acteurs, realisateur et durée de chaque film noté :
 ``` 
 node data-base-detail.js
 ``` 
