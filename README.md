@@ -32,6 +32,13 @@ async function scrapeAllFilms(page, profileUrl, maxPages = 17)
 
 6. Après quelques secondes, le fichier `films-vus.csv` (ou `films-à-voir.csv` pour la liste de film à voir) est généré dans le dossier /Allocine2Letterboxd. Rends-toi sur la [page d'import Letterboxd](https://letterboxd.com/import/) des films vus, ou la [page d'import des films à voir](https://letterboxd.com/watchlist/), pour charger le fichier sur son profil.
 
+### Bonus 
+
+Pour recuperer les urls de chaque film noté :
+``` 
+node urlscraping.js
+``` 
+
 ## Tu rencontres un problème ?
 
 [Ouvre un ticket](https://github.com/Poudlardo/Allocine2Letterboxd/issues/new/choose) et décris ton problème en quelques lignes avec une capture d'écran.
